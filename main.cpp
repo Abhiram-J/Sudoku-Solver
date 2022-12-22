@@ -2,10 +2,8 @@
 using namespace std;
 const int N = 9;
 
-void print(vector<vector<int>>& grid)
-{
-    for (int i = 0; i < N; i++)
-    {
+void print(vector<vector<int>>& grid){
+    for (int i = 0; i < N; i++){
         for (int j = 0; j < N; j++)
             cout << grid[i][j] << " ";
         cout << "\n";
@@ -13,8 +11,7 @@ void print(vector<vector<int>>& grid)
     cout <<"\n";
 }
 
-bool isSafe(vector<vector<int>>& grid, int r, int c, int num)
-{
+bool isSafe(vector<vector<int>>& grid, int r, int c, int num){
 
     for (int x = 0; x < N; x++)
         if (grid[r][x] == num)
@@ -34,14 +31,12 @@ bool isSafe(vector<vector<int>>& grid, int r, int c, int num)
     return true;
 }
 
-bool solveSudoku(vector<vector<int>>& grid, int r, int c)
-{
+bool solveSudoku(vector<vector<int>>& grid, int r, int c){
 
     if (r == N - 1 && c == N)
         return true;
 
-    if (c == N)
-    {
+    if (c == N){
         r++;
         c = 0;
     }
@@ -49,11 +44,9 @@ bool solveSudoku(vector<vector<int>>& grid, int r, int c)
     if (grid[r][c] > 0)
         return solveSudoku(grid, r, c + 1);
 
-    for (int num = 1; num <= N; num++)
-    {
+    for (int num = 1; num <= N; num++){
 
-        if (isSafe(grid, r, c, num))
-        {
+        if (isSafe(grid, r, c, num)){
             grid[r][c] = num;
             if (solveSudoku(grid, r, c + 1))
                 return true;

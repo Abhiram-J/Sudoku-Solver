@@ -1,13 +1,10 @@
 
 const N = 9;
 
-function clearboard(grid)
-{
-    for (let i = 0; i < N; i++) 
-        for(let j = 0; j < N; j++)
-            grid[i][j].value = 0;
-    
-}
+const solve = document.querySelector(".solve");
+const clear = document.querySelector(".clear");
+const nums = document.querySelectorAll(".num");
+
 
 function isSafe(grid,  r,  c,  num)
 {
@@ -59,27 +56,59 @@ function solveSudoku(grid, r, c)
 }
 
 
-const nums = document.querySelectorAll(".num");
-// console.log(grid);
 
-let grid = Array.from(Array(N), () => new Array(N));
+function fetchValuefromgrid(){
+let grid = [];
+for (let i = 0; i < N; i++){
+    grid[i] = [];
+    for(let j = 0; j < N; j++){
+        let val = parseInt(nums[i*N+j].value);
+        if ( val > 0 && val < 10 )
+        grid[i][j] = parseInt(nums[i*N+j].value);
+        else
+        grid[i][j] = 0;
+    }
+}
 
-for (let i = 0; i < N; i++) 
-    for(let j = 0; j < N; j++)
-        grid[i][j] = nums[i*N + j];
 
-const solve = document.querySelector(".solve");
-const clear = document.querySelector(".clear");
+return grid;
+}
+
+
 
 clear.addEventListener("click", (e) => {
     e.preventDefault();
-    clearboard(grid);
+
+    for (let i = 0; i < N; i++) 
+        for(let j = 0; j < N; j++)
+            nums[i*N +j].value = "";
+    
 });
 
 solve.addEventListener("click", (e) => {
     e.preventDefault();
+    let grid = fetchValuefromgrid();
+    console.log(grid);
     console.log("clicked");
-   let ispossible = solveSudoku(grid, 0, 0);
+//    let ispossible = solveSudoku(grid, 0, 0);
+
+   fetch('http://localhost:3000', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(grid)
+   }).then(res => res.json()).then(solution => 
+    {
+        
+        for (let i = 0; i < N; i++){
+            for(let j = 0; j < N; j++){
+                nums[i*N+j].value = solution[i][j] ;
+            }
+        }
+
+    }) 
+
     
 });
 
